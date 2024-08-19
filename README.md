@@ -8,9 +8,8 @@ This repository contains tutorials for 19 different Django web applications. Eac
 
 The repository includes:
 
-1. 19 backend tutorial markdown files
-2. 19 frontend tutorial markdown files
-3. This README file
+1. 19 tutorial markdown files for both backend and frontend
+2. This README file
 
 ## Important Note
 
