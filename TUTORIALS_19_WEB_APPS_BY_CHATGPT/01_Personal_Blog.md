@@ -80,6 +80,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
          def __str__(self):
              return self.title
      ```
+[#1]: https://github.com/akbargherbal/My_Journey_Learning_Django/issues/1 "ForeignKey"
 
    - **Comment Model:**
      ```python
@@ -102,7 +103,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
              return self.name
      ```
 
-2. **User Models:**
+1. **User Models:**
 
    - **UserProfile Model:**
      ```python
