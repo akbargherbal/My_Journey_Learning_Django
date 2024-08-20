@@ -80,7 +80,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
          def __str__(self):
              return self.title
      ```
-- *[ForeignKey]*[#1]
+- *ForeignKey* [#1]
 
    - **Comment Model:**
      ```python
