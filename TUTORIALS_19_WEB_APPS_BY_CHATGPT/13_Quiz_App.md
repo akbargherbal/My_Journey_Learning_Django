@@ -1,4 +1,5 @@
 
+
 # Quiz App
 ## An app for creating and taking quizzes, with dynamic form generation, scoring, and leaderboards.
 
@@ -565,3 +566,117 @@ For accessibility, enhance your HTML structure with ARIA roles and proper semant
 
 For this application, I've ensured that the HTML structure is complete, follows Django's template structure, and includes interactive elements via HTMX and AlpineJS. CSS provides responsive styling, and the structure adheres to modern web standards with a focus on accessibility. Considerations for reusable components and logical user flow are incorporated to maximize the maintainability and usability of the application.
     
+---
+## QUIZ
+## What is the purpose of `related_name` in Django models?
+
+The `related_name` attribute in Django models is used within a `ForeignKey` or `ManyToManyField` to specify the reverse relationship from the related model back to the model where the field is defined. It's essentially a convenient way to access related objects from the "other side" of the relationship. 
+
+For instance, in the `quizzes/models.py` file of the tutorial, the `Question` model has a `ForeignKey` to `Quiz` with `related_name='questions'`:
+
+```python
+quiz = models.ForeignKey(Quiz, related_name='questions', on_delete=models.CASCADE)
+```
+
+This means that, from a `Quiz` object, you can access all related questions using `quiz.questions.all()`. Without `related_name`, you would have to use the less convenient `quiz.question_set.all()`.
+
+## What is the purpose of `on_delete=models.CASCADE` in Django models?
+
+In Django models, `on_delete` is used within a relationship field (like `ForeignKey`) to define what happens when the related object is deleted. `models.CASCADE` is one of the possible options, and it signifies that if a related object is deleted, all objects referencing it should also be deleted. 
+
+For example, in the tutorial, within `quizzes/models.py`, the `Question` model uses:
+
+```python
+quiz = models.ForeignKey(Quiz, related_name='questions', on_delete=models.CASCADE)
+```
+
+This means that if a `Quiz` object is deleted, all associated `Question` objects will also be deleted automatically to maintain data integrity.
+
+## What are Django Class-Based Views (CBVs)?
+
+Class-Based Views (CBVs) in Django provide an alternative way to implement views using Python classes instead of functions. They promote code reuse and organization by encapsulating common view logic. 
+
+In the provided code (`quizzes/views.py`), `QuizListView` and `QuizDetailView` are examples of CBVs:
+
+```python
+from django.views.generic import ListView, DetailView
+
+class QuizListView(ListView):
+    model = Quiz
+    template_name = 'quizzes/quiz_list.html'
+
+class QuizDetailView(DetailView):
+    model = Quiz
+    template_name = 'quizzes/quiz_detail.html'
+```
+
+These CBVs inherit from generic views (`ListView`, `DetailView`) provided by Django, simplifying common tasks like fetching objects and rendering templates.
+
+## What does `hx-target` do in HTMX?
+
+In HTMX, `hx-target` specifies the HTML element that should be updated with the response of an AJAX request. This allows for precise control over which part of the page is dynamically changed.
+
+For instance, in the `Quiz Detail Template` section:
+
+```html
+<form hx-post="{% url 'quiz_submit' object.id %}" hx-target="#feedback">
+```
+
+The `hx-target="#feedback"` attribute indicates that after submitting the form, the response from the server should be used to update the content of the element with the ID "feedback." 
+
+## How does the `x-data` directive work in Alpine.js?
+
+The `x-data` directive in Alpine.js is used to initialize a component and define its reactive data. It's typically added to a parent HTML element to contain the component's logic. 
+
+In the `AlpineJS Integration` section, we see:
+
+```html
+<form x-data="{ selected: {} }" ...>
+```
+
+Here, `x-data="{ selected: {} }"` initializes a reactive object `selected` (as an empty object initially).  Any changes to `selected` will reactively update the parts of the HTML within the form that use this data. 
+
+## What does `hx-swap` do in HTMX?
+
+The `hx-swap` attribute in HTMX controls how the response from an AJAX request should be swapped into the DOM (Document Object Model). 
+
+The `Leaderboard Template` illustrates its usage:
+
+```html
+<tbody hx-get="{% url 'leaderboard' %}" hx-swap="innerHTML">
+```
+
+Here, `hx-swap="innerHTML"` means that when the `hx-get` request completes, the `innerHTML` of the `<tbody>` element will be replaced with the content received from the server.
+
+## What is a Django Template?
+
+A Django Template is a text file (typically HTML) that contains variables and template tags, processed by the Django template engine to generate dynamic HTML content. 
+
+The `base.html` file provided in the `Frontend Structure` section is an example of a Django template:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Quiz App{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
+```
+
+Tags like `{% block %}` and `{% endblock %}` define blocks that can be overridden by child templates, enabling template inheritance for a consistent layout across the site. 
+
+## How do you include static files (CSS, JavaScript) in Django templates?
+
+To include static files like CSS and JavaScript in Django templates, you use the `{% static %}` template tag. 
+
+For example, in `base.html`, you can see:
+
+```html
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+```
+
+This assumes you have a `static` folder at the top level of your app, and `styles.css` resides within a `css` subfolder. Before deploying, you need to run the `collectstatic` command to gather all static files into a single location for production.

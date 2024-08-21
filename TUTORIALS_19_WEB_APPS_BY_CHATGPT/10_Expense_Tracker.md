@@ -1,4 +1,5 @@
 
+
 # Expense Tracker
 ## A tool for tracking expenses, analyzing spending, and visualizing data with charts and graphs.
 
@@ -633,3 +634,32 @@ Make sure to use proper semantic tags (like header, main, table, etc.) and ARIA 
 
 This implementation focuses on making your application functional, aesthetically pleasing, and user-friendly while maintaining accessibility considerations. Further enhancement can involve optimizing JavaScript behavior and refining CSS to match your brand’s style.
     
+---
+## QUIZ
+## What is `on_delete=models.CASCADE` in the Expense model?
+
+In the `Expense` model, `on_delete=models.CASCADE` is used when defining the foreign key relationship with the `Category` model:
+
+```python
+category = models.ForeignKey(Category, on_delete=models.CASCADE)
+```
+
+This means that if a `Category` is deleted, all associated `Expense` objects will also be deleted. This ensures data integrity by preventing orphaned expenses.
+
+## What is the purpose of `{% url 'expense_list' %}` in the base template?
+
+The `{% url '' %}` template tag is used to reverse a URL pattern by its name. In this case, `{% url 'expense_list' %}` generates the URL that maps to the `expense_list` URL pattern defined in your `expenses/urls.py` file. Using named URLs makes your templates more maintainable, as you don't need to hardcode URLs within them.
+
+## What are `hx-get` and `hx-target` attributes used for in HTMX?
+
+- **`hx-get`**: This attribute indicates that an HTTP GET request should be made to the provided URL when an event is triggered on the element (e.g., a click). This allows you to load content dynamically without a full page reload.
+
+- **`hx-target`**: This attribute specifies the element that should be updated with the response received from the server. It helps pinpoint where the new content should be injected.
+
+## How does AlpineJS integrate with the provided HTML structure?
+
+AlpineJS is integrated by initializing it in a `<script>` tag and then using its directives (like `x-data`, `x-show`, `@click`) directly within HTML elements. This makes it easy to add dynamic behavior to elements without writing separate JavaScript files.
+
+## What is the significance of using semantic HTML tags for accessibility?
+
+Semantic HTML tags like `<header>`, `<main>`, and `<nav>` provide meaning and structure to your content, making it easier for screen readers and other assistive technologies to understand and navigate your webpage. This is crucial for creating accessible web applications that everyone can use effectively.

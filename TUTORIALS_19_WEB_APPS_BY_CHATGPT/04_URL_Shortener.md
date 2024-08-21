@@ -1,4 +1,5 @@
 
+
 # URL Shortener
 ## A service to shorten long URLs and redirect users from short URLs to the original ones.
 
@@ -520,3 +521,71 @@ Implemented a simple navigation bar in `base.html`.
 
 These code snippets and design choices ensure a responsive, interactive, and accessible user interface, working seamlessly with the provided backend structure. Feel free to expand on these basics to add additional features or complexity!
     
+---
+## QUIZ
+## What is `get_random_string` in Django and why is it used here?
+
+`get_random_string` is a utility function in Django (specifically from `django.utils.crypto`) used to generate cryptographically secure random strings.
+
+In the tutorial, it's used within the `ShortURL` model's `save` method to create a unique short code for each URL if one isn't provided:
+
+```python
+    def save(self, *args, **kwargs):
+        if not self.short_code:
+            self.short_code = get_random_string(length=6)
+        super().save(*args, **kwargs)
+```
+
+This ensures that every short URL created has a random, unpredictable 6-character code, making it suitable for the URL shortening application.
+
+## What does the `on_delete=models.CASCADE` argument do in a ForeignKey?
+
+In Django models, `on_delete=models.CASCADE` is used within a `ForeignKey` field to define the behavior when the referenced object is deleted. In this case, it means that if a `ShortURL` instance is deleted, any associated `ClickEvent` or `URLAnalytics` instances will also be deleted automatically.
+
+This helps maintain database integrity and prevents orphaned records. For example:
+
+```python
+short_url = models.ForeignKey(ShortURL, on_delete=models.CASCADE)
+```
+
+Here, deleting a `ShortURL` will automatically delete all related `ClickEvent` instances associated with it.
+
+## What is the purpose of `hx-target` in HTMX?
+
+The `hx-target` attribute in HTMX is used to specify which element on the page should be updated with the response received from the server.
+
+In the tutorial, it's used in `create_short_url.html` like this:
+
+```html
+<div id="previewArea" htmx-get="/preview/" htmx-trigger="keyup from:original" hx-target="#preview">
+```
+
+This means that when a keyup event occurs in an input field with the name `original`, an HTMX request is sent to `/preview/`, and the response will replace the content of the element with the ID `preview` inside the `previewArea` div.
+
+## Why is `@submit.prevent` used in the form?
+
+In the `create_short_url.html` file, `@submit.prevent` is used within the `<form>` tag as an Alpine.js modifier.
+
+It prevents the default form submission behavior, which is to reload the entire page.  By preventing the default action, HTMX can handle the form submission in the background, updating only the necessary parts of the page as defined by your HTMX attributes.
+
+## What is the purpose of `{% static 'css/style.css' %}` in Django templates?
+
+In Django templates, `{% static %}` is a template tag that helps you manage static files like CSS, JavaScript, and images. It's essential for referencing these files in a way that Django understands, especially in production environments.
+
+For example:
+
+```html
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+```
+
+This line in `base.html` tells Django to look for a file named `style.css` inside the `static/css/` directory of your app or project and generate the correct URL for it.
+
+## What does `defer` do in the `<script>` tag?
+
+In the `base.html` template, the `defer` attribute is used within the `<script>` tag for loading JavaScript files:
+
+```html
+<script src="//unpkg.com/alpinejs" defer></script>
+```
+
+The `defer` attribute tells the browser to download the script file while parsing the HTML but to execute it only after the HTML parsing is complete. This is common practice for ensuring that scripts don't block the rendering of the page and improves the loading performance, especially for larger scripts.

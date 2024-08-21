@@ -1,4 +1,5 @@
 
+
 # Personal Note-Taking App
 ## An app for taking, organizing, and searching rich-text notes, with tagging and full-text search capabilities.
 
@@ -671,3 +672,56 @@ Utilize semantic HTML and ARIA roles where required.
 
 By following these steps, your app will have a complete and functional frontend that integrates seamlessly with the Django backend, ensuring a rich user experience. This setup also incorporates interactivity, responsiveness, and accessibility for diverse user needs.
     
+---
+## QUIZ
+## What is the purpose of `hx-get` and `hx-target` in the note list template?
+
+`hx-get` and `hx-target` are HTMX attributes that enable dynamic content loading.
+
+- `hx-get`: Specifies the URL to fetch content from when the element is interacted with (e.g., clicked).
+  - In our tutorial, clicking a note title triggers an HTTP GET request to the note detail URL.
+
+- `hx-target`: Determines where to inject the fetched content.
+  - The content from the detail view is dynamically loaded into the specified target element.
+
+```html
+<a href="#" hx-get="{% url 'note_detail' note.id %}" hx-target="#note-detail">{{ note.title }}</a>
+<div id="note-detail"></div> 
+```
+
+This approach eliminates full-page reloads, resulting in a smoother and quicker user experience.
+
+## What's the difference between `{{ note.content }}` and `{{ note.content|safe }}`?
+
+- `{{ note.content }}`: This displays the content of the note as plain text. Any HTML tags within the content will be escaped and shown literally.
+
+- `{{ note.content|safe }}`: This tells Django that the content is safe to render as HTML. If you trust the source of the content and want any HTML within it to be interpreted, you should use this. However, be cautious if the content comes from user input, as it could lead to security vulnerabilities (like XSS attacks).
+
+## What does `{% csrf_token %}` do in a Django form?
+
+`{% csrf_token %}` is a Django template tag crucial for security. It adds a hidden input field to your form that protects against Cross-Site Request Forgery (CSRF) attacks. 
+
+Imagine a malicious website tricks a logged-in user of your site into submitting a form to your Django application. Without CSRF protection, the application would process that request as if it came from the legitimate user.
+
+`{% csrf_token %}` generates a unique token for each user session. This token is then included in the form data and verified by Django upon submission. If the tokens don't match, the request is rejected, preventing potential harm.
+
+Always include `{% csrf_token %}` within any form that modifies data on your Django server to ensure security.
+
+## How does the note preview feature work in `note_form.html`?
+
+The preview utilizes JavaScript to display the content of the note in real-time as the user types, providing instant visual feedback.
+
+1. **Event Listener:** The `onclick` event on the "Preview" button triggers the `togglePreview` function.
+
+2. **Content Retrieval:**  The `togglePreview` function fetches the current value from the textarea where the note content is being edited.
+
+3. **Preview Update:** It then updates the content of the `#note-preview` div with the retrieved content.
+
+```javascript
+function togglePreview() {
+    const content = document.querySelector('textarea[name="content"]').value;
+    document.getElementById('note-preview').innerHTML = content;
+}
+```
+
+This example relies on basic JavaScript for simplicity. In a real-world scenario, you might use a library like marked.js to render the preview as Markdown, providing a more accurate representation of the final note.

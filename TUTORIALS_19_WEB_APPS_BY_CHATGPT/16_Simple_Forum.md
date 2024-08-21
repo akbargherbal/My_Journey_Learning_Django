@@ -1,4 +1,5 @@
 
+
 # Simple Forum
 ## A discussion forum with threaded comments, user roles, and moderation features.
 
@@ -627,3 +628,94 @@ Use ARIA roles and attributes appropriately in the HTML for improved accessibili
 
 In this setup, the frontend is designed to be straightforward yet extendable. You can build upon these fundamentals by adding more detailed interactivity or styling as required. Ensure any additional changes align with backend logic and URL structures.
     
+---
+## QUIZ
+## What is `settings.AUTH_USER_MODEL` and why is it used?
+
+`settings.AUTH_USER_MODEL` is a Django setting that points to the model used to represent users in your application. By default, it's set to `'auth.User'`, which is Django's built-in user model.
+
+We use it in the tutorial's models (like `Profile`, `Thread`, `Post`, etc.) to establish relationships with the user model. This ensures that these models can reference and interact with user data correctly.
+
+For instance, in the `Profile` model:
+
+```python
+user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+```
+
+This creates a one-to-one relationship between the `Profile` and the user model, ensuring each user has one profile.
+
+Using `settings.AUTH_USER_MODEL` provides flexibility. If you decide to customize the user model later, you only need to change the setting in `settings.py`, and all related models will automatically use the new user model.
+
+
+## What does `on_delete=models.CASCADE` mean in Django models?
+
+In Django models, `on_delete=models.CASCADE` is used within relationship fields (like `ForeignKey`) to define what happens when the related object is deleted.
+
+`models.CASCADE` specifies that when the related object is deleted, the objects that have a relationship with it should also be deleted. 
+
+For example:
+
+```python
+thread = models.ForeignKey(Thread, on_delete=models.CASCADE)  
+```
+
+This means if a `Thread` object is deleted, all `Post` objects associated with that thread will also be deleted. This helps maintain data integrity and prevents orphaned records in the database.
+
+
+## How does HTMX's `hx-get` attribute work?
+
+In HTMX, the `hx-get` attribute is used to make AJAX requests to the server to fetch HTML content. 
+
+For example:
+
+```html
+<div hx-get="/forums/{{ thread.id }}/comments/" hx-target="#comment-section">
+  </div>
+```
+
+This code snippet, when triggered (e.g., on page load), will send a GET request to the URL `/forums/{{ thread.id }}/comments/`. 
+
+The response from the server, expected to be HTML content, is then used to replace the content within the element with the id `comment-section`. This allows for dynamic content updates without full page reloads.
+
+
+## What is the purpose of `hx-target` in HTMX?
+
+`hx-target` in HTMX specifies which part of the DOM should be updated with the response received from the server after an AJAX request. It allows you to target specific elements for content replacement, making your updates more precise.
+
+In our tutorial, `hx-target` is used with `hx-get` to update the comment section dynamically:
+
+```html
+<div hx-get="{% url 'comment_list' post.id %}" hx-target="#comment-section-{{ post.id }}">
+```
+
+This ensures that the comments fetched for a specific post are inserted into the correct `comment-section` div associated with that post.
+
+
+## What is Alpine.js used for in this tutorial?
+
+In this tutorial, Alpine.js is primarily used for handling the interactive moderation dropdown on the moderation page. 
+
+```html
+<div x-data="{ open: false }">
+  <button @click="open = !open">Moderate</button>
+  <div x-show="open">
+    <!-- Moderation options here -->
+  </div>
+</div>
+```
+
+Here's how it works:
+
+- `x-data="{ open: false }"` initializes an Alpine.js component with a data object containing the `open` property, initially set to `false`.
+- `@click="open = !open"` toggles the value of `open` between `true` and `false` each time the button is clicked.
+- `x-show="open"` conditionally shows the moderation options div based on the value of `open`. 
+
+This setup effectively creates a simple dropdown menu for moderation actions, showcasing Alpine.js's ability to add lightweight interactivity to Django templates.
+
+## Why is `{% csrf_token %}` important in Django forms?
+
+In Django, `{% csrf_token %}` is a template tag that's crucial for security when working with forms. It provides protection against Cross-Site Request Forgery (CSRF) attacks.
+
+CSRF attacks occur when a malicious website, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site when the user is authenticated.
+
+By including `{% csrf_token %}` within your form, Django generates a hidden input field with a unique token. This token verifies that the form submission is coming from your website and not from a malicious source, safeguarding your application from CSRF attacks.

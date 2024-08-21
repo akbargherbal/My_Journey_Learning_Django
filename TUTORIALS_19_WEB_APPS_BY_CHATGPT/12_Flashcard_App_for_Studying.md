@@ -1,4 +1,5 @@
 
+
 # Flashcard App for Studying
 ## An application for creating and studying flashcards, incorporating algorithms for spaced repetition and progress tracking.
 
@@ -610,3 +611,74 @@ Ensure semantic HTML and appropriate ARIA attributes if needed:
 
 This template and structure provide a comprehensive start for your Flashcard App frontend, considering all the task's requirements while making sure it integrates seamlessly with Django as a backend. If you need any more specific details about a particular part, please let me know!
     
+---
+## QUIZ
+## What is the purpose of `{% static %}` in Django templates?
+
+The `{% static %}` template tag in Django is used to link static files like CSS, JavaScript, and images in your templates.  It's crucial for Django to serve these files correctly during development and production. 
+
+In the tutorial's `base.html`, you see it used to link the `styles.css` file:
+
+```html
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+```
+
+This tells Django to find the `styles.css` file within your project's static files and generate the correct URL for it.
+
+## What does 'defer' do in the `<script>` tag?
+
+The `defer` attribute in a `<script>` tag tells the browser to execute the script after the HTML document has been fully parsed. This is especially useful for scripts that modify the DOM, ensuring they don't cause errors by trying to access elements before they exist.
+
+In the `base.html` template:
+
+```html
+<script src="https://unpkg.com/alpinejs@3.10.5" defer></script>
+```
+
+The `defer` attribute ensures that AlpineJS is executed only after the entire HTML document is ready, preventing potential conflicts.
+
+## How does the `hx-trigger` attribute work in HTMX?
+
+The `hx-trigger` attribute in HTMX allows you to specify the event that triggers an AJAX request. It gives you fine-grained control over when and how HTMX interacts with your server.
+
+In the provided code snippet for loading deck details:
+
+```html
+<div id="deck-list" hx-get="/flashcards/decks/" hx-target="#deck-detail-target" hx-trigger="load">
+    <!-- deck list will be loaded here -->
+</div>
+```
+
+The `hx-trigger="load"` attribute ensures that the AJAX request (defined by `hx-get`) is triggered immediately when the page loads, populating the `#deck-detail-target` element with the retrieved deck list.
+
+##  What is the role of `hx-target` in HTMX requests?
+
+The `hx-target` attribute in HTMX specifies the DOM element that should be updated with the response received from the server. This enables targeted updates, making your application more efficient and user-friendly.
+
+For instance, in the flashcard addition form:
+
+```html
+<form hx-post="/flashcards/decks/{{ deck.id }}/add" hx-target="#deck-detail-{{ deck.id }}">
+    <!-- Form content here -->
+</form>
+```
+
+The `hx-target="#deck-detail-{{ deck.id }}"` attribute ensures that after a new flashcard is added, only the specific `div` element with the matching `id`  (representing the deck details) is updated with the server's response, rather than reloading the entire page.
+
+## How do you handle form validation when using HTMX?
+
+While HTMX simplifies AJAX interactions, form validation is typically handled on the server-side with Django.  Django's forms provide built-in validation, and you can return error messages in the HTMX response to display them dynamically.
+
+For example, in the flashcard addition form, if a required field is missing, the Django view can return an HTMX response containing the error message, which can then be displayed within the form without a full page reload.
+
+##  What are ARIA attributes and how are they used in this context?
+
+ARIA attributes are used to provide additional information about HTML elements to assistive technologies like screen readers, improving accessibility for users with disabilities.
+
+For instance:
+
+```html
+<button aria-label="Next Card">Next</button>
+```
+
+The `aria-label="Next Card"` attribute provides a descriptive label for the button, which might have context-specific functionality not immediately clear from its visible text, thus aiding screen reader users in understanding its purpose.

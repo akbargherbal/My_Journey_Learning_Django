@@ -1,4 +1,5 @@
 
+
 # Guestbook
 ## An application allowing visitors to leave comments or messages. Includes spam prevention mechanisms.
 
@@ -570,3 +571,107 @@ Ensure initial HTML uses semantic tags such as `<main>`, consider color contrast
 
 These implementations integrate seamlessly with the Django backend as per the tutorial specifications. The setup caters to accessibility guidelines, has a user-friendly interface, and is structured for easy navigation. Make sure to test extensively both the frontend interactions and backend connections to ensure smooth operation.
     
+---
+## QUIZ
+## What is the purpose of `hx-get`, `hx-trigger`, and `hx-target` attributes in the provided HTMX example?
+
+These attributes control how HTMX interacts with the server to update parts of your webpage without full reloads.
+
+- `hx-get="/entries/live-update/"`: This tells HTMX to make a GET request to the specified URL (`/entries/live-update/`) when an event is triggered.
+- `hx-trigger="load"`: This defines what triggers the HTMX request. In this case, it's "load", meaning the request happens as soon as the page loads.
+- `hx-target="#entry-list"`: This specifies where to place the response from the server. Here, the response will update the content of the element with the ID "entry-list".
+
+## What does `{% static 'styles.css' %}` do in the Django template?
+
+This template tag is used to include static files, like CSS files, in your Django templates. Django will look for the `styles.css` file within your static files directories and replace the tag with the correct URL to that file. This ensures that your CSS is correctly loaded and applied to your webpages. 
+
+## How does the `x-model` directive in AlpineJS work with the form input?
+
+In AlpineJS, the `x-model` directive creates a two-way data binding between an HTML input element and an AlpineJS component's data property. In the example:
+
+```html
+<input type="text" name="keyword" x-model="keyword" placeholder="Enter spam keyword">
+```
+
+`x-model="keyword"` binds the input field's value to the `keyword` data property within the AlpineJS component. Any changes made to the input field will automatically update the `keyword` property, and vice versa. This reactive behavior simplifies data management in your frontend application.
+
+## What is the purpose of `{% csrf_token %}` in the Django forms?
+
+In Django, `{% csrf_token %}` is a template tag crucial for protecting against Cross-Site Request Forgery (CSRF) attacks.  These attacks occur when a malicious website, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site when the user is authenticated.  Placing this tag within your form ensures that a hidden field with a token is included.  When the form is submitted, Django verifies this token to confirm that the request originated from your application and not from a malicious source.
+
+## How does the `@click.prevent` modifier work in the AlpineJS button?
+
+The `@click.prevent` modifier in AlpineJS combines two features:
+
+- `@click`: This is the event listener, which in this case, listens for the "click" event on the button.
+- `.prevent`: This modifier prevents the default behavior of the click event. For a submit button, the default behavior is to submit the form and reload the page. 
+    
+By using `@click.prevent`, you're essentially stopping the form from being submitted in the traditional way and instead allowing your AlpineJS component to handle the submission process. This is useful for creating more dynamic and interactive user experiences without full page reloads.
+
+## Why are there two separate apps (guestbook and moderation) in the tutorial?
+
+The tutorial separates the Guestbook application into two apps: `guestbook` and `moderation`, to follow the principle of separating concerns.  This approach enhances code organization, maintainability, and scalability.
+
+- **Guestbook App:** Focuses on handling user-facing features like displaying entries and submitting new ones.
+- **Moderation App:** Handles the backend logic for reviewing entries and managing spam filters.
+
+This separation makes the codebase easier to understand, maintain, and extend in the future. For example, if you wanted to add more complex moderation features, you could do so within the `moderation` app without affecting the core functionality of the `guestbook` app.
+
+## What is the role of the `/entries/live-update/` endpoint mentioned in the HTMX example?
+
+The `/entries/live-update/` endpoint is a URL that should be handled by your Django application. This endpoint should return an HTML snippet containing the updated list of guestbook entries. HTMX will then automatically inject this snippet into the specified target element (`#entry-list`) on your webpage, providing a seamless live update experience for the user. 
+
+## Could you provide an example of a function in `scripts.js` that would work with the AlpineJS `$dispatch('submit')` event?
+
+```javascript
+document.addEventListener('alpine:initialized', () => {
+    Alpine.store('flashMessages', {
+        success: null,
+        error: null
+    });
+
+    Alpine.directive('submit', (el, {}, { dispatch }) => {
+        el.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+        // Get form data
+        const formData = new FormData(el);
+
+        try {
+            const response = await fetch(el.action, {
+                method: el.method,
+                body: formData
+            });
+
+            if (response.ok) {
+                // Handle success, e.g., display a success message
+                dispatch('submit.success');
+            } else {
+                // Handle error, e.g., display an error message
+                const errorData = await response.json();
+                dispatch('submit.error', errorData); 
+            }
+        } catch (error) {
+            // Handle network or other errors
+            dispatch('submit.error', { message: 'An error occurred.' });
+        }
+    });
+});
+
+Alpine.start();
+```
+
+## What are ARIA attributes and how are they relevant to accessibility in this context?
+
+ARIA (Accessible Rich Internet Applications) attributes are HTML attributes that provide additional semantic information about elements on a webpage. This information helps assistive technologies, like screen readers, understand and interpret the content more effectively, making the website more accessible to users with disabilities.
+
+In the tutorial's context, while basic ARIA attributes are mentioned,  it's crucial to use them thoughtfully throughout your HTML, especially for interactive elements and dynamic content updates. For instance, when using HTMX to update content, you might use ARIA live regions to announce changes to users who are not able to see them visually.
+
+## What is the purpose of the `@click.prevent="$dispatch('submit')"` code on the button in the `spam_filter.html` example?
+
+This code snippet combines AlpineJS features for form handling:
+
+- `@click.prevent`: This part prevents the default form submission behavior when the button is clicked.
+- `$dispatch('submit')`: This emits a custom "submit" event from the AlpineJS component.
+
+Essentially, this code intercepts the normal form submission and allows you to handle the submission process through custom JavaScript code within your AlpineJS component. This could involve sending an AJAX request, validating the form data, or updating other parts of your application without requiring a full page reload.

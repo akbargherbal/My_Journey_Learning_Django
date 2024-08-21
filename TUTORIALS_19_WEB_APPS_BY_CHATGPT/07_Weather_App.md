@@ -1,4 +1,5 @@
 
+
 # Weather App
 ## An application that fetches and displays weather information from an external API, with error handling and caching of API responses.
 
@@ -552,3 +553,40 @@ For a production-level app, consider integrating with tools like Webpack for ass
 
 This frontend setup is designed to be extendable and maintainable, following Django’s conventions and modern JavaScript libraries to handle dynamic content and interactivity efficiently.
     
+---
+## QUIZ
+## What is the purpose of creating a virtual environment before starting a Django project?
+
+A virtual environment isolates your project's dependencies from other Python projects on your system. This prevents conflicts if different projects require different versions of the same library. It also ensures that you don't accidentally modify the global Python environment.
+
+## Why do we need to add 'weather' and 'user' to INSTALLED_APPS in settings.py?
+
+`INSTALLED_APPS` tells Django which applications are part of your project. By adding 'weather' and 'user', you're informing Django to recognize and use the models, views, and other components defined within those apps.
+
+## What is the significance of the 'on_delete' argument in a ForeignKey?
+
+The `on_delete` argument in a `ForeignKey` determines what happens when the related object is deleted. In the provided code, `models.CASCADE` means that if a `Location` is deleted, all associated `WeatherData` instances will also be deleted. `models.SET_NULL` means that if a `Location` is deleted, the `favorite_location` field in `UserProfile` will be set to NULL.
+
+## What is the role of 'get_object_or_404' in WeatherView?
+
+`get_object_or_404` is a Django shortcut that attempts to fetch an object from the database based on the provided model and lookup parameters. If an object matching the criteria is not found, it raises a `Http404` exception, resulting in a 404 Not Found error page.
+
+## What are the benefits of using JsonResponse in FetchWeatherData?
+
+`JsonResponse` is a Django class that helps you create an HTTP response with JSON content. It automatically serializes the data into a JSON format and sets the appropriate Content-Type header for the response, making it easy to send data to your frontend JavaScript code.
+
+## Explain the purpose of the '__init__' method in Python classes.
+
+The `__init__` method is a special method in Python classes, also known as the constructor. It is automatically called when you create a new instance of the class and is used to initialize the object's attributes. Although not explicitly shown in the tutorial's model definitions,  it's essential for setting up the initial state of an object. 
+
+## What does '{% static 'css/styles.css' %}' do in the template?
+
+This template tag, `{% static %}`, is used to include static files, such as CSS files, images, and JavaScript files, in Django templates. It generates the URL for the static file, which is then used by the browser to load the resource.
+
+## How does HTMX provide live updates without a page reload?
+
+HTMX intercepts the button click event and issues an AJAX request to the specified URL (`hx-get`). The server responds with a partial HTML fragment, which HTMX then uses to update a specific part of the page (`hx-target`) without requiring a full page reload.
+
+## What is the purpose of 'x-data' and 'x-show' in AlpineJS?
+
+`x-data` initializes a reactive component scope in AlpineJS. It defines the data that the component will work with. `x-show` conditionally shows or hides an element based on the truthiness of the provided JavaScript expression. In the tutorial, it toggles the visibility of the settings content based on the value of the 'open' property.

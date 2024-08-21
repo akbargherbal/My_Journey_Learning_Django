@@ -1,4 +1,5 @@
 
+
 # Movie Database and Review System
 ## An app to search and review movies, integrating with external APIs (e.g., IMDB) for movie data and user ratings.
 
@@ -651,3 +652,76 @@ Display failure or success messages based on form submissions using HTMX.
 
 Ensure all templates are integrated into Django's template directory, link stylesheets and scripts properly, and test across different browsers to ensure compatibility and responsiveness. The combination of HTMX and AlpineJS facilitates an interactive experience without over-reliance on large JavaScript frameworks.
     
+---
+## QUIZ
+## What is the purpose of 'context_object_name' in Django Class-Based Views?
+
+In Django's Class-Based Views, `context_object_name` allows you to customize the name of the object passed to the template. Without it, the default name would be the model's lowercase name followed by `_list` or `_detail` depending on the view.  
+
+In the tutorial, you see it used in `MovieListView`:
+
+```python
+context_object_name = 'movies'
+```
+
+This means that in `movie_list.html`, you can iterate over the queryset using `movies`.  If not specified, you would have to use `movie_list` instead.
+
+## What is the purpose of the `{% static %}` template tag?
+
+The `{% static %}` template tag helps you include static files like CSS, JavaScript, or images in your Django templates. It constructs the correct URL for serving these files, which is essential in production settings.
+
+In `base.html`:
+
+```html
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+```
+
+This line includes the `styles.css` file located inside the `static` folder of your app. Always use `{% static %}` to reference static files in your templates.
+
+## What are the benefits of using HTMX's `hx-trigger` attribute?
+
+The `hx-trigger` attribute in HTMX lets you control when an HTMX request should be triggered. This is useful for making your web app more responsive without writing a lot of JavaScript.
+
+For example, in `movie_list.html`:
+
+```html
+hx-trigger="keyup changed delay:500ms"
+```
+
+This tells HTMX to send a request each time the user types something in the search bar, but only after they've stopped typing for 500 milliseconds. This avoids making unnecessary requests and improves performance.
+
+## How does AlpineJS's `x-show` directive work?
+
+The `x-show` directive in AlpineJS conditionally shows or hides elements on your page based on the truthiness of an expression. It provides a reactive way to manage element visibility.
+
+Here's an example from `movie_detail.html`:
+
+```html
+<div x-show="open" style="display: none;">
+```
+
+This snippet will show the div containing the movie reviews only when the `open` variable is true.  The `style="display: none;"` ensures that the reviews are hidden by default.
+
+## What does the `hx-target` attribute in HTMX do?
+
+The `hx-target` attribute in HTMX specifies where to insert the response of an HTMX request on the page. This allows you to update specific parts of your page without a full reload.
+
+For instance, in `movie_list.html`:
+
+```html
+hx-target="#movies-list"
+```
+
+This ensures that the server's response, which will be a new list of movies, will replace the content of the element with the ID `movies-list`. 
+
+## What are the advantages of using a ManyToManyField in Django models?
+
+A `ManyToManyField` in Django allows you to create a relationship where an object of one model can be associated with multiple objects of another model, and vice versa. 
+
+In this tutorial, it's used to connect `Movie` and `Genre`:
+
+```python
+genres = models.ManyToManyField(Genre)
+```
+
+This means a movie can have multiple genres, and a genre can be associated with many movies. This is more flexible than a `ForeignKey`, which enforces a one-to-many relationship.
