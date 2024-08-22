@@ -1,4 +1,3 @@
-
 # Personal Blog
 
 ## A blogging platform where users can create, edit, and delete blog posts, comment on posts, and manage content through an admin interface.
@@ -95,28 +94,28 @@ In the Django Post model, you encounter `ForeignKey` and `related_name`.
 
 - **related_name**: This defines the reverse name to use for accessing related objects. For instance, using `related_name='posts'` allows you to access all posts that belong to a category with `category_instance.posts.all()`.
 
-   - **Comment Model:**
+  - **Comment Model:**
 
-     ```python
-     class Comment(models.Model):
-         post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-         author = models.CharField(max_length=100)
-         text = models.TextField()
-         created_date = models.DateTimeField(auto_now_add=True)
+    ```python
+    class Comment(models.Model):
+        post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+        author = models.CharField(max_length=100)
+        text = models.TextField()
+        created_date = models.DateTimeField(auto_now_add=True)
 
-         def __str__(self):
-             return f'Comment by {self.author} on {self.post}'
-     ```
+        def __str__(self):
+            return f'Comment by {self.author} on {self.post}'
+    ```
 
-   - **Category Model:**
+  - **Category Model:**
 
-     ```python
-     class Category(models.Model):
-         name = models.CharField(max_length=100, unique=True)
+    ```python
+    class Category(models.Model):
+        name = models.CharField(max_length=100, unique=True)
 
-         def __str__(self):
-             return self.name
-     ```
+        def __str__(self):
+            return self.name
+    ```
 
 1. **User Models:**
 
@@ -280,6 +279,7 @@ DTL simplifies the task of creating intricate and interactive HTML layouts proce
 ### Base Template Outline
 
 - **`templates/base.html`:**
+
   ```html
   <!DOCTYPE html>
   <html lang="en">
@@ -702,7 +702,9 @@ Django messages framework is used for notifications, placed in the `base.html` t
 With the implementation above, your "Personal Blog" Django app's frontend is comprehensive and aligns with the structure provided, ensuring a smooth user experience and tasteful design.
 
 ---
+
 ## QUIZ
+
 ## What does `{% static 'css/style.css' %}` do in Django templates?
 
 This is a Django template tag that helps you include static files, like CSS files, in your templates. Django handles locating and linking these files correctly, even during development. This specific line links the `style.css` file located in the `static/css/` directory of your project.
@@ -724,7 +726,7 @@ These are HTMX attributes that modify the behavior of HTML elements.
 The `x-data` directive in AlpineJS initializes a component and its reactive data. In the given example:
 
 ```html
-<div x-data="{ showCommentForm: false }">
+<div x-data="{ showCommentForm: false }"></div>
 ```
 
 It creates a new AlpineJS component with a data property called `showCommentForm`, initially set to `false`. This data property can then be used to control the visibility of elements within the component.
